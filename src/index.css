@@ -1,0 +1,149 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink-950: #081325;
+  --color-ink-900: #0f1f3a;
+  --color-ink-700: #2d3d5a;
+  --color-ink-500: #5d6f92;
+  --color-ink-200: #d6dfec;
+  --color-paper-50: #f5f9ff;
+  --color-paper-100: #e9f1ff;
+  --color-cash-600: #0f9d7a;
+  --color-cash-100: #d8f8ef;
+  --color-warn-500: #d8a017;
+  --color-danger-600: #dc4b4b;
+  --color-danger-100: #ffe7e7;
+  --font-display: "Manrope", "Segoe UI", sans-serif;
+  --font-body: "Plus Jakarta Sans", "Segoe UI", sans-serif;
+}
+
+:root {
+  color-scheme: light;
+  --surface-primary: rgba(255, 255, 255, 0.9);
+  --surface-secondary: rgba(245, 249, 255, 0.8);
+  --border-soft: rgba(214, 223, 236, 0.8);
+  --text-primary: #081325;
+  --text-secondary: #5d6f92;
+  font-family: var(--font-body);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html.dark {
+  color-scheme: dark;
+  --surface-primary: rgba(2, 6, 23, 0.72);
+  --surface-secondary: rgba(15, 23, 42, 0.76);
+  --border-soft: rgba(51, 65, 85, 0.65);
+  --text-primary: #e6eefc;
+  --text-secondary: #94a3b8;
+}
+
+body {
+  margin: 0;
+  color: var(--text-primary);
+  background:
+    radial-gradient(circle at 14% 0%, rgba(91, 155, 255, 0.18) 0%, transparent 32%),
+    radial-gradient(circle at 84% 12%, rgba(65, 211, 189, 0.16) 0%, transparent 38%),
+    linear-gradient(180deg, #f7faff 0%, #eff5fb 100%);
+  transition:
+    background 220ms ease,
+    color 220ms ease,
+    border-color 220ms ease;
+}
+
+html.dark body {
+  color: #e6eefc;
+  background:
+    radial-gradient(circle at 14% 0%, rgba(59, 130, 246, 0.22) 0%, transparent 30%),
+    radial-gradient(circle at 84% 12%, rgba(16, 185, 129, 0.16) 0%, transparent 36%),
+    linear-gradient(180deg, #081325 0%, #0b1727 100%);
+}
+
+#root {
+  min-height: 100vh;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float-soft {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.52s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-float-soft {
+  animation: float-soft 8s ease-in-out infinite;
+}
+
+.card {
+  @apply rounded-2xl border border-ink-200/80 bg-white/90 shadow-sm backdrop-blur-sm dark:border-slate-800/80 dark:bg-slate-950/70;
+  transition:
+    background-color 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease,
+    transform 220ms ease;
+}
+
+.table-cell {
+  @apply px-4 py-3 text-sm text-ink-900 dark:text-slate-100;
+}
+
+.skeleton {
+  @apply animate-pulse rounded-lg bg-paper-100 dark:bg-slate-800;
+}
+
+.status-badge {
+  @apply inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold;
+}
+
+.app-input {
+  @apply w-full rounded-xl border border-ink-200 bg-white px-3 py-2.5 text-sm text-ink-900 outline-none transition duration-200 placeholder:text-ink-500 focus:border-ink-700 focus:ring-2 focus:ring-ink-700/10 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-400 dark:focus:border-slate-300 dark:focus:ring-slate-100/10;
+}
+
+.app-select {
+  @apply w-full rounded-xl border border-ink-200 bg-white px-3 py-2.5 text-sm text-ink-900 outline-none transition duration-200 focus:border-ink-700 focus:ring-2 focus:ring-ink-700/10 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-slate-300 dark:focus:ring-slate-100/10;
+}
+
+.app-button-primary {
+  @apply inline-flex items-center justify-center gap-2 rounded-xl bg-ink-950 px-4 py-2.5 text-sm font-semibold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-ink-900 focus:outline-none focus:ring-2 focus:ring-ink-700/20 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 dark:bg-slate-100 dark:text-slate-950 dark:hover:bg-white dark:focus:ring-slate-100/20;
+}
+
+.app-button-secondary {
+  @apply inline-flex items-center justify-center gap-2 rounded-xl border border-ink-200 bg-white px-4 py-2.5 text-sm font-semibold text-ink-700 transition duration-200 hover:-translate-y-0.5 hover:bg-paper-50 focus:outline-none focus:ring-2 focus:ring-ink-700/10 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 dark:focus:ring-slate-100/10;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
