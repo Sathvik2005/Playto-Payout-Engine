@@ -93,6 +93,7 @@ This repo includes a Render blueprint at `render.yaml` so the backend web servic
 3. After deployment, copy the backend URL into `VITE_API_BASE_URL` for the Vercel frontend.
 4. Keep `CORS_ALLOWED_ORIGINS` set to your Vercel domain so browser requests are allowed.
 5. The backend health check is `/`, which returns `{ "status": "ok", "service": "playto-payout-engine" }`.
+6. The backend is pinned to Python 3.11.9 via `backend/runtime.txt`, and `psycopg[binary]` is pinned to a Render-compatible version so dependency resolution does not fail during deploy.
 
 Production env values are already reflected in the checked-in env examples:
 - `backend/.env.example` for Render/backend runtime variables
