@@ -90,10 +90,11 @@ This repo includes a Render blueprint at `render.yaml` so the backend web servic
 
 1. In Render, choose "New +" -> "Blueprint" and connect this repository.
 2. Render will read `render.yaml` and create the web service, worker, Redis, and Postgres resources.
-3. After deployment, copy the backend URL into `VITE_API_BASE_URL` for the Vercel frontend.
-4. Keep `CORS_ALLOWED_ORIGINS` set to your Vercel domain so browser requests are allowed.
-5. The backend health check is `/`, which returns `{ "status": "ok", "service": "playto-payout-engine" }`.
-6. The backend is pinned to Python 3.11.9 via `backend/runtime.txt`, and `psycopg[binary]` is pinned to a Render-compatible version so dependency resolution does not fail during deploy.
+3. Render runs `python manage.py seed_payout_data` as a pre-deploy step, so the dashboard has test merchants, bank accounts, and credit history immediately after deployment.
+4. After deployment, copy the backend URL into `VITE_API_BASE_URL` for the Vercel frontend.
+5. Keep `CORS_ALLOWED_ORIGINS` set to your Vercel domain so browser requests are allowed.
+6. The backend health check is `/`, which returns `{ "status": "ok", "service": "playto-payout-engine" }`.
+7. The backend is pinned to Python 3.11.9 via `backend/runtime.txt`, and `psycopg[binary]` is pinned to a Render-compatible version so dependency resolution does not fail during deploy.
 
 Production env values are already reflected in the checked-in env examples:
 - `backend/.env.example` for Render/backend runtime variables
