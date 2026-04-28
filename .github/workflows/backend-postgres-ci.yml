@@ -44,8 +44,8 @@ jobs:
       DB_HOST: 127.0.0.1
       DB_PORT: '5432'
       CELERY_TASK_ALWAYS_EAGER: 'True'
-      CELERY_BROKER_URL: redis://localhost:6379/0
-      CELERY_RESULT_BACKEND: redis://localhost:6379/1
+      CELERY_BROKER_URL: memory://
+      CELERY_RESULT_BACKEND: cache+memory://
       JWT_SECRET_KEY: ci-jwt-secret
       JWT_ACCESS_TTL_SECONDS: '3600'
 
@@ -69,4 +69,4 @@ jobs:
         run: python manage.py migrate
 
       - name: Run payout test suite
-        run: python manage.py test payouts
+        run: python manage.py test payouts --verbosity 2
