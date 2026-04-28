@@ -1,0 +1,129 @@
+services:
+  - type: redis
+    name: playto-payout-redis
+    ipAllowList: []
+    plan: starter
+
+  - type: web
+    name: playto-payout-engine
+    env: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate
+    startCommand: gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 4
+    healthCheckPath: /
+    autoDeploy: true
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_DEBUG
+        value: false
+      - key: DJANGO_ALLOWED_HOSTS
+        value: playto-payout-engine.onrender.com
+      - key: DB_ENGINE
+        value: django.db.backends.postgresql
+      - key: DB_NAME
+        fromDatabase:
+          name: playto-payout-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: playto-payout-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: playto-payout-db
+          property: password
+      - key: DB_HOST
+        fromDatabase:
+          name: playto-payout-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: playto-payout-db
+          property: port
+      - key: CELERY_BROKER_URL
+        fromService:
+          type: redis
+          name: playto-payout-redis
+          property: connectionString
+      - key: CELERY_RESULT_BACKEND
+        fromService:
+          type: redis
+          name: playto-payout-redis
+          property: connectionString
+      - key: CELERY_TASK_ALWAYS_EAGER
+        value: false
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://your-vercel-app.vercel.app
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: JWT_ACCESS_TTL_SECONDS
+        value: 3600
+      - key: SECURE_SSL_REDIRECT
+        value: true
+      - key: SESSION_COOKIE_SECURE
+        value: true
+      - key: CSRF_COOKIE_SECURE
+        value: true
+      - key: SECURE_HSTS_SECONDS
+        value: 31536000
+      - key: SECURE_HSTS_INCLUDE_SUBDOMAINS
+        value: true
+      - key: SECURE_HSTS_PRELOAD
+        value: true
+
+  - type: worker
+    name: playto-payout-worker
+    env: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: celery -A config worker -l info
+    autoDeploy: true
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DB_ENGINE
+        value: django.db.backends.postgresql
+      - key: DB_NAME
+        fromDatabase:
+          name: playto-payout-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: playto-payout-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: playto-payout-db
+          property: password
+      - key: DB_HOST
+        fromDatabase:
+          name: playto-payout-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: playto-payout-db
+          property: port
+      - key: CELERY_BROKER_URL
+        fromService:
+          type: redis
+          name: playto-payout-redis
+          property: connectionString
+      - key: CELERY_RESULT_BACKEND
+        fromService:
+          type: redis
+          name: playto-payout-redis
+          property: connectionString
+      - key: CELERY_TASK_ALWAYS_EAGER
+        value: false
+      - key: JWT_SECRET_KEY
+        generateValue: true
+
+databases:
+  - name: playto-payout-db
+    databaseName: playto_payouts
+    user: playto
+    plan: starter
+
+# Render Redis is typically created as a separate service in the dashboard.
+# The blueprint provisions it here so the backend and worker can deploy together.

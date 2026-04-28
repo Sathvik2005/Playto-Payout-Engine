@@ -84,6 +84,20 @@ This repo is ready to deploy as the React frontend on Vercel.
 3. Keep the backend deployed separately and set `CORS_ALLOWED_ORIGINS` on backend, for example `https://your-app.vercel.app`.
 4. Refreshes on `/dashboard`, `/ledger`, and `/payouts` are handled by the SPA fallback config.
 
+### Render backend deployment
+
+This repo includes a Render blueprint at `render.yaml` so the backend web service, Redis, and Postgres can be provisioned together.
+
+1. In Render, choose "New +" -> "Blueprint" and connect this repository.
+2. Render will read `render.yaml` and create the web service, worker, Redis, and Postgres resources.
+3. After deployment, copy the backend URL into `VITE_API_BASE_URL` for the Vercel frontend.
+4. Keep `CORS_ALLOWED_ORIGINS` set to your Vercel domain so browser requests are allowed.
+5. The backend health check is `/`, which returns `{ "status": "ok", "service": "playto-payout-engine" }`.
+
+Production env values are already reflected in the checked-in env examples:
+- `backend/.env.example` for Render/backend runtime variables
+- `.env.example` for the Vercel frontend `VITE_API_BASE_URL`
+
 ## Tests
 
 ```bash
